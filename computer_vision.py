@@ -7,16 +7,13 @@ class ComputerVisionCapture:
     has_finger_on_the_screen = False
     ratio = 2.0
 
-    def detect_shape(self, c):
+    def detect_shape(self, contour):
         discovered_shape = ""
-        peri = cv2.arcLength(c, True)
-        approx = cv2.approxPolyDP(c, 0.04 * peri, True)
+        peri = cv2.arcLength(contour, True)
+        approx = cv2.approxPolyDP(contour, 0.04 * peri, True)
         if len(approx) == 4:
-            (x, y, w, h) = cv2.boundingRect(approx)
-            ar = w / float(h)
-
-            discovered_shape = "square" if ar > 0.94 and ar < 1.06 else "rectangle"
-        return discovered_shape
+            return "rectangle"
+        return "unknown shape"
 
     def rescale_frame(self, frame, scale=0.5):
         """
@@ -48,7 +45,7 @@ class ComputerVisionCapture:
         cv2_webcam_number = 0
         camera = cv2.VideoCapture(cv2_webcam_number)
         while True:
-            ret, frame = camera.read()
+            _, frame = camera.read()
             rescaled_image = self.rescale_frame(frame)
             cleaned_image = self.clean_image_noises(rescaled_image)
 
@@ -60,9 +57,7 @@ class ComputerVisionCapture:
             # cv2.imshow('blurred_img', self.clean_image_noises(frame))
             cv2.imshow("Blurred image", cleaned_image)
             cv2.imshow("Thresholded image", thresh)
-            contours, hierarchies = self.find_countours(thresh)
-
-            newShapes = []
+            contours = self.find_countours(thresh)[0]
 
             new_cnts = [c for c in contours if 300 < cv2.contourArea(c) < 4000]
             new_cnts = [c for c in new_cnts if cv2.contourArea(c, True) > 0]
