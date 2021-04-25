@@ -19,12 +19,12 @@ lint: ## runs linters in updated code
 
 .PHONY: black
 black: ## runs black in updated code
-	@ /bin/sh -c git diff --diff-filter=ACM dev --name-only | grep '.*.py' | xargs -r black"
+	@ /bin/sh -c "git diff --diff-filter=ACM main --name-only | grep '.*.py' | xargs -r black"
 
 .PHONY: flake8
 black: ## runs flake8 in updated code
-	@ /bin/sh -c git diff --diff-filter=ACM dev --name-only | grep '.*.py' | xargs -r flake8"
+	@ /bin/sh -c "git diff --diff-filter=ACM main --name-only | grep '.*.py' | xargs -r flake8"
 
 .PHONY: isort
 isort: ## runs isort over the updated code
-	@ /bin/sh -c git diff --diff-filter=ACM dev --name-only | grep '.*.py' | xargs -r isort"
+	@ /bin/sh -c "git diff --diff-filter=ACM main --name-only | grep '.*.py' | xargs -r isort"

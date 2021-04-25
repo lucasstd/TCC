@@ -1,4 +1,7 @@
-cv2
+numpy==1.20.2
+opencv-python==4.5.1.48
+playsound==1.2.2
+six==1.15.0
 black
 mock
 coverage
