@@ -29,5 +29,5 @@ pip install -r requirements.txt
 ## Now you can just execute the code (in some systems could be python3 main.py, make sure u r using python3)
 
 ```bash
-python main.py
+python web/app.py
 ```
