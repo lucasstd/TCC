@@ -11,14 +11,14 @@ computer_vision = ComputerVisionCapture()
 def get_contours_in_image():
     camera = cv2.VideoCapture(0)
     while True:
-        rescaled_image = computer_vision.read_rescaled_image(camera)
-        image_with_contours = computer_vision.draw_contours(rescaled_image)
+        processed_image = computer_vision.process_image(camera)
 
-        ret, buffer = cv2.imencode('.jpg', image_with_contours)
+        # https://stackoverflow.com/questions/57762334/image-streaming-with-opencv-and-flask-why-imencode-is-needed
+        _, buffer = cv2.imencode('.jpg', processed_image)
         buffered_image = buffer.tobytes()
         yield (
-            b'--frame\r\n'
-            b'Content-Type: image/jpeg\r\n\r\n' + buffered_image + b'\r\n'
+            b"--frame\r\n"
+            b"Content-Type: image/jpeg\r\n\r\n%s\r\n" % buffered_image
         )
 
 

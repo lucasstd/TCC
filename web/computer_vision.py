@@ -1,7 +1,9 @@
 import cv2
 import numpy as np
-# from play_sounds import play_note_by_key_place
 # import configparser
+
+# from play_sounds import play_note_by_key_place
+import helpers
 
 
 class ComputerVisionCapture:
@@ -9,17 +11,14 @@ class ComputerVisionCapture:
     def __init__(self, ratio=2.0):
         self.ratio = ratio
 
-    def is_rectangle(self, contour):
-        contour_length = cv2.arcLength(contour, True)
-        approx_curve = cv2.approxPolyDP(contour, 0.04 * contour_length, True)
-        contour_area = cv2.contourArea(approx_curve)
-        return True if len(approx_curve) == 4 and 10000 > contour_area > 200 else False
-        if len(approx_curve) == 4 and 10000 > contour_area > 200:
-            return True
-            # cnt = approx_curve.reshape(-1, 2)
-            # max_cos = np.max([angle_cos( cnt[i], cnt[(i+1) % 4], cnt[(i+2) % 4] ) for i in range(4)])
-            # if max_cos < 0.1:
-            #     return True
+    def is_a_keyboard_key(self, contour):
+        contour_area = cv2.contourArea(contour)
+        if 10000 > contour_area > 200:
+            are_shapes_close = True
+            contour_length = cv2.arcLength(contour, are_shapes_close)
+            approx_curve = cv2.approxPolyDP(contour, 0.02 * contour_length, are_shapes_close)
+            if 9 > len(approx_curve) > 4:
+                return True
         return False
 
     def find_fingers(self, image, min_color_bound=np.array([5,55,60], dtype=np.uint8),
@@ -33,44 +32,31 @@ class ComputerVisionCapture:
         # filters (It is useful in removing noise inside the main structure)
         maskClose = cv2.morphologyEx(mask_open, cv2.MORPH_CLOSE, kernel_close)
         # img_contours = cv2.findContours(image.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)[0]
-        # print(img_contours)
 
-    def rescale_frame(self, image, scale=0.5):
-        """
-            Resize the frame is good to have an improvement
-            of the capability to read the image
-        """
-        image_height = image.shape[0]
-        image_width = image.shape[1]
-        dimensions = int(image_width*scale), int(image_height*scale)
-
-        return cv2.resize(image, dimensions)
-
-    def get_cleaned_image_from_noises(self):
-        rescaled_image = self.read_rescaled_image()
-        # Removes the "noise" of the image (removes extra elements like bad lighting)
-        blurred_image = cv2.GaussianBlur(rescaled_image, (3, 3), cv2.BORDER_DEFAULT)
-        return blurred_image
 
     def find_countours(self, img):
         """check https://docs.opencv.org/master/dd/d49/tutorial_py_contour_features.html"""
         # TODO: test cv2.RETR_TREE instead RETR_LIST
         # TODO: test cv.CHAIN_APPROX_SIMPLE instead CHAIN_APPROX_NONE
         all_contours_found = cv2.findContours(img.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)[0]
-        notes = []
 
+        notes = []
         for contour in all_contours_found:
-            if self.is_rectangle(contour):
+            if self.is_a_keyboard_key(contour):
                 notes.append(contour)
         return notes
+        # return filter(self.find_keys, all_contours_found)
 
     def draw_contours(self, img_to_draw):
-        thresholded_image = self.get_thresholded_image()
+        thresholded_image = helpers.threshold_image(img_to_draw)
         contours = self.find_countours(thresholded_image)
-        self.draw_notes_name(img_to_draw, contours)
-
-        cv2.drawContours(img_to_draw, contours, -1, (0,0,255), 2)
-        return img_to_draw
+        if contours:
+            try:
+                self.draw_notes_name(img_to_draw, contours)
+                cv2.drawContours(img_to_draw, contours, -1, (0,0,255), 2)
+            except Exception: # contours null, but that's not an error
+                pass
+        return img_to_draw, thresholded_image
 
     def draw_notes_name(self, image, contours):
         for contour in contours:
@@ -81,24 +67,15 @@ class ComputerVisionCapture:
                 cv2.putText(image, f"nota: {contour}", (cx, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
 
 
-    def read_rescaled_image(self, camera=None):
-        if not camera:
-            cv2_webcam_number = 0
-            camera = cv2.VideoCapture(cv2_webcam_number)
-        _, frame = camera.read()
-        rescaled_image = self.rescale_frame(frame)
-        return rescaled_image
+    # def read_rescaled_image(self, camera=None):
+    #     if not camera:
+    #         cv2_webcam_number = 0
+    #         camera = cv2.VideoCapture(cv2_webcam_number)
+    #     _, frame = camera.read()
+    #     rescaled_image = self.rescale_frame(frame)
+    #     return rescaled_image
     
-    def get_thresholded_image(self):
-        blurred_image = self.get_cleaned_image_from_noises()
-        # converts the image to gray (because it's easier to find elements)
-        gray_image = cv2.cvtColor(blurred_image, cv2.COLOR_BGR2GRAY)
-
-        # TODO: test thresh vs canny
-        # threshold makes above 225 color will be black, under 125 will be white
-        thresh = cv2.threshold(gray_image, 150, 200, cv2.THRESH_BINARY_INV)[1]
-
-        return thresh
+    
     
         # cv2.putText(frame, shape, (cX, cY), 0.5, (255, 255, 255), 2)
 
@@ -115,4 +92,12 @@ class ComputerVisionCapture:
         # opening = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
 
 
+
+    def process_image(self, frame=cv2.VideoCapture(0)):
+        _, frame = frame.read()
+        rescaled_frame = helpers.rescale_image(frame)
+        image_with_contours, thresholded_image = self.draw_contours(rescaled_frame)
+
+        # img_stacked = np.hstack((image_with_contours, thresholded_image))
+        return thresholded_image
         # play_note_by_key_place(1)
