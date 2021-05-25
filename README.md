@@ -1,7 +1,7 @@
 Eletronic Keyboard
 ==================
 
-# To execute for now u need to install Install all requirements on your machine
+# To execute for now you need to install all requirements on your machine
 ## You can setup using virtualenv (to don't use your global settings)
 ```console
 pip install virtual env
