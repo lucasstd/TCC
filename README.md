@@ -1,33 +1,38 @@
-# TCC
+Eletronic Keyboard
+==================
 
 # To execute for now u need to install Install all requirements on your machine
 ## You can setup using virtualenv (to don't use your global settings)
-```bash
+```console
 pip install virtual env
 ```
 
-```bash
+```console
 virtualenv venv
 ```
 
-```bash
+```console
 . venv/bin/activate
 ```
 
 To deactivate just type
 
-```bash
+```console
 deactivate
 ```
 
 ## Install all requirements using pip or pip3 depending on your system configuration (make sure u are using python3 for now)
 
-```bash
+```console
 pip install -r requirements.txt
 ```
 
 ## Now you can just execute the code (in some systems could be python3 main.py, make sure u r using python3)
 
-```bash
+```console
 python web/app.py
 ```
+
+## You can open the website in your browsers at:
+
+http://0.0.0.0:5000/
