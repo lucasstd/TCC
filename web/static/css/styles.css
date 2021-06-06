@@ -1,3 +1,26 @@
-h3 {
-    background-color: #ccc
+body {
+    margin: 0;
+    background: #ebebeb;
+}
+
+.navbar {
+    width: 100%;
+    padding: 10px 25px;
+    background-color: #f8f8f8;
+    align-items: center;
+    border-color: #e7e7e7;
+    height: 56px;
+    display: flex;
+    flex-direction: row
+}
+
+.navbar a {
+    font-size: 20px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.centralize {
+    display: flex;
+    justify-content: center;
 }

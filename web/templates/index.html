@@ -1,24 +1,40 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <title>Eletronic keyboard online</title>
+{% extends "base.html" %}
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="A simple eletronic keyboard page">
+{% block content %}
+    <main class="content">
+        <div class="container">
+            {% if all_songs["easy_songs"] %}
+                <h3>Easy difficulty Songs:</h3>
+                <div class="slideshow songlist">
+                    {% for id, song_values in all_songs["easy_songs"].items() %}
+                        <li>
+                            <a href="/song/{{ id }}">{{ song_values['name'] }}</a>
+                        </li>
+                    {% endfor %}
+                </div>
+            {% endif %}
 
-    <link rel="stylesheet" href="../static/css/styles.css">
-</head>
-<body>
-    <div class="container">
-        <div class="row">
-            <div>
-                <h3>Live Streaming</h3>
-                <img alt="image with contours" src="{{ url_for('get_contours_image') }}">
-            </div>
+            {% if all_songs["medium_songs"] %}
+                <h3>Medium difficulty Songs:</h3>
+                <div class="slideshow songlist">
+                    {% for id, song_values in all_songs["medium_songs"].items() %}
+                        <li>
+                            <a href="/song/{{ id }}">{{ song_values['name'] }}</a>
+                        </li>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if all_songs["hard_songs"] %}
+                <h3>Hard difficulty Songs:</h3>
+                <div class="slideshow songlist">
+                    {% for id, song_values in all_songs["hard_songs"].items() %}
+                        <li>
+                            <a href="/song/{{ id }}">{{ song_values['name'] }}</a>
+                        </li>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
-    </div>
-
-    <script>console.log("dsadasdsa")</script>
-</body>
-</html>
+    </main>
+{% endblock %}

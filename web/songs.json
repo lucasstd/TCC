@@ -1,0 +1,27 @@
+{
+    "easy_songs": {
+        
+    },
+
+    "medium_songs": {
+        "3": {
+            "name": "The Beatles - Yesterday",
+            "style": "rock, pop",
+            "href": "https://www.youtube.com/embed/i9bxl7SZFLY"
+        },
+
+        "2": {
+            "name": "Naruto - Sadness and Sorrow",
+            "style": "pop",
+            "href": "https://www.youtube.com/embed/veW6SBcUeSU"
+        }
+    },
+
+    "hard_songs": {
+        "1": {
+            "name": "Queens - Bohemian Rhapsody",
+            "style": "pop",
+            "href": "https://www.youtube.com/embed/gHKcUAMU2Lg"
+        }
+    }
+}

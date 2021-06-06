@@ -1,18 +1,19 @@
 import cv2
-import numpy as np
+import config
+
 
 def get_cleaned_image_from_noises(image):
-    # Removes the "noise" of the image (removes extra elements like bad lighting)
-    blurred_image = cv2.GaussianBlur(image, (3, 3), cv2.BORDER_DEFAULT)
+    # Removes the "noises" in image (removes extra elements like bad lighting)
+    blurred_image = cv2.GaussianBlur(image, (5, 5), cv2.BORDER_DEFAULT)
     return blurred_image
 
 
 def threshold_image(image):
-    blurred_image=get_cleaned_image_from_noises(image)
+    blurred_image = get_cleaned_image_from_noises(image)
     # converts the image to gray (because it's easier to find elements)
     gray_image = cv2.cvtColor(blurred_image, cv2.COLOR_BGR2GRAY)
-    # threshold makes above 225 color will be black, under 125 will be white
     thresh = cv2.threshold(gray_image, 150, 200, cv2.THRESH_BINARY_INV)[1]
+    # return cv2.Canny(gray_image, 10, 200, 3)
     return thresh
 
 
