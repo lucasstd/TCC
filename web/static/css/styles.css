@@ -1,11 +1,21 @@
+:root {
+    --red-bg-color: brown;
+    --blue-bg-color: #3500D3;
+    --green-bg-color: green;
+  }
+
 body {
     margin: 0;
     background: #ebebeb;
 }
 
+a {
+    text-decoration: none;
+}
+
 .navbar {
     width: 100%;
-    padding: 10px 25px;
+    padding: 10px 0;
     background-color: #f8f8f8;
     align-items: center;
     border-color: #e7e7e7;
@@ -17,10 +27,34 @@ body {
 .navbar a {
     font-size: 20px;
     font-weight: 600;
-    text-decoration: none;
+    margin-left: 20px;
+}
+
+.container {
+    padding: 0 15px;
 }
 
 .centralize {
     display: flex;
     justify-content: center;
+}
+
+.bgcolor-blue {
+    background-color: var(--blue-bg-color);
+}
+
+.bgcolor-red {
+    background-color: var(--red-bg-color);
+}
+
+.bgcolor-green {
+    background-color: var(--green-bg-color);
+}
+
+/* HOME */
+
+.music-style {
+    border-radius: 5px;
+    padding: 2px 10px;
+    margin-left: 10px;
 }

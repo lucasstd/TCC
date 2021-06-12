@@ -1,19 +1,25 @@
 {
     "easy_songs": {
-        
+        "4": {
+            "name": "Attack on Titan Season - Shinzou wo Sasageyo",
+            "style": "Classic",
+            "href": "https://www.youtube.com/embed/hd2zbxGrf2s?start=10",
+            "background_color": "bgcolor-green"
+        }
     },
 
     "medium_songs": {
         "3": {
             "name": "The Beatles - Yesterday",
-            "style": "rock, pop",
-            "href": "https://www.youtube.com/embed/i9bxl7SZFLY"
+            "style": "Rock, pop",
+            "href": "https://www.youtube.com/embed/i9bxl7SZFLY",
+            "background_color": "bgcolor-red"
         },
-
         "2": {
             "name": "Naruto - Sadness and Sorrow",
-            "style": "pop",
-            "href": "https://www.youtube.com/embed/veW6SBcUeSU"
+            "style": "Pop",
+            "href": "https://www.youtube.com/embed/veW6SBcUeSU",
+            "background_color": "bgcolor-blue"
         }
     },
 
@@ -21,7 +27,8 @@
         "1": {
             "name": "Queens - Bohemian Rhapsody",
             "style": "pop",
-            "href": "https://www.youtube.com/embed/gHKcUAMU2Lg"
+            "href": "https://www.youtube.com/embed/gHKcUAMU2Lg",
+            "background_color": "bgcolor-blue"
         }
     }
 }

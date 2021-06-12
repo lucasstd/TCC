@@ -7,9 +7,10 @@
                 <h3>Easy difficulty Songs:</h3>
                 <div class="slideshow songlist">
                     {% for id, song_values in all_songs["easy_songs"].items() %}
-                        <li>
+                        <ol>
                             <a href="/song/{{ id }}">{{ song_values['name'] }}</a>
-                        </li>
+                            <span class="music-style {{ song_values['background_color'] }}">{{ song_values['style'] }}</span>
+                        </ol>
                     {% endfor %}
                 </div>
             {% endif %}
@@ -18,9 +19,10 @@
                 <h3>Medium difficulty Songs:</h3>
                 <div class="slideshow songlist">
                     {% for id, song_values in all_songs["medium_songs"].items() %}
-                        <li>
+                        <ol>
                             <a href="/song/{{ id }}">{{ song_values['name'] }}</a>
-                        </li>
+                            <span class="music-style {{ song_values['background_color'] }}">{{ song_values['style'] }}</span>
+                        </ol>
                     {% endfor %}
                 </div>
             {% endif %}
@@ -29,11 +31,12 @@
                 <h3>Hard difficulty Songs:</h3>
                 <div class="slideshow songlist">
                     {% for id, song_values in all_songs["hard_songs"].items() %}
-                        <li>
+                        <ol>
                             <a href="/song/{{ id }}">{{ song_values['name'] }}</a>
-                        </li>
+                            <span class="music-style {{ song_values['background_color'] }}">{{ song_values['style'] }}</span>
+                        </ol>
                     {% endfor %}
-                </div>
+                </ol>
             {% endif %}
         </div>
     </main>

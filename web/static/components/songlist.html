@@ -1,0 +1,12 @@
+{% block songlist %}
+ {% if all_songs["easy_songs"] %}
+    <h3>{% trans dificulty_text %}</h3>
+    <div class="slideshow songlist">
+        {% for id, song_values in all_songs["easy_songs"].items() %}
+            <li>
+                <a href="/song/{{ id }}">{{ song_values['name'] }}</a>
+            </li>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}
