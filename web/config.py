@@ -15,3 +15,5 @@ IMG_SHAPE_X = 640
 IMG_SHAPE_Y = 360
 
 LANDMARK_FINGERTIPS_NUMBERS = [4, 8, 12, 16, 20]
+
+NOTES = ["C", "D", "E", "F", "G", "A", "B"]

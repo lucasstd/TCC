@@ -8,6 +8,12 @@ def get_cleaned_image_from_noises(image):
     return blurred_image
 
 
+def draw_contours(img, contours, color=config.RGB_RED_COLOR, thickness=2) -> None:
+    try:
+        cv2.drawContours(img, contours, -1, color, 2)
+    except Exception:
+        pass  # contours are null, but that's not an error
+
 def threshold_image(image):
     blurred_image = get_cleaned_image_from_noises(image)
     # converts the image to gray (because it's easier to find elements)

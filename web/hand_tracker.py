@@ -13,22 +13,23 @@ hands = mp_hands.Hands(
 )
 
 
-def draw_circle_in_fingertip(img_to_draw, fingertip_landmark):
-    """convert from Decimal position to pixels and draw fingertips"""
+def get_fingertip_landmarks(img_to_draw, fingertip_landmark) -> list:
+    """convert from Decimal position to pixels and return it"""
     landmark_x = fingertip_landmark.x
     landmark_y = fingertip_landmark.y
+    landmark_z = fingertip_landmark.z
 
     cx = int(IMG_SHAPE_X * landmark_x)
     cy = int(IMG_SHAPE_Y * landmark_y)
 
-    cv2.circle(img_to_draw, (cx, cy), 10, RGB_BLUE_COLOR, cv2.FILLED)
+    return landmark_z, cx, cy
 
     
-def hand_detect(frame, previous_z_index=Decimal(10)):
+def hand_detect(frame, previous_z_index):
     """Draw hand_detection and returns if has a chance to release or play a note"""
     fingertip_could_have_pressed_a_key = []
     rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    rgb_image.flags.writeable = False
+    rgb_image.flags.writeable = True
     results = hands.process(rgb_image)
 
     if results.multi_hand_landmarks:
@@ -38,9 +39,10 @@ def hand_detect(frame, previous_z_index=Decimal(10)):
 
             for fingertip_number in LANDMARK_FINGERTIPS_NUMBERS:
                 fingertip_landmark = hand_landmarks.landmark[fingertip_number]
-                draw_circle_in_fingertip(rgb_image, fingertip_landmark)
+                cz, cx, cy = get_fingertip_landmarks(rgb_image, fingertip_landmark)
+                cv2.circle(rgb_image, (cx, cy), 10, RGB_BLUE_COLOR, cv2.FILLED)
 
-                # if previous_z_index > fingertip_landmark.z:
+                # if previous_z_index > cz:
                 #     fingertip_could_have_pressed_a_key.append(True)
                 # else:
                 #     fingertip_could_have_pressed_a_key.append(False)
