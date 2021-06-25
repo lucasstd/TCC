@@ -27,10 +27,10 @@ class ComputerVisionCapture:
     def get_contours_in_image(self):
         """Yields an image type to be send with draws and contours"""
         camera = cv2.VideoCapture(0)
-        fingertips_indexes = [10, 10, 10, 10, 10]
+        fingers_info = {finger: 10 for finger in config.LANDMARK_FINGERTIPS_NUMBERS}
         while True:
-            processed_image, fingertips_indexes = computer_vision.process_image(
-                fingertips_indexes, camera
+            processed_image, fingers_info = computer_vision.process_image(
+                fingers_info, camera
             )
 
             _, buffer = cv2.imencode('.jpg', processed_image)
@@ -82,7 +82,7 @@ class ComputerVisionCapture:
         )
         return list(filter(self.is_a_keyboard_key, all_contours_found))
 
-    def display_error_frame(self, previous_indexes, display_text="Can't read the camera"):
+    def display_error_frame(self, display_text="Can't read the camera"):
         """Returns a black image with can't read the camera drawn in blue"""
         error_reading_camera = np.zeros(
             (config.IMG_SHAPE_Y, config.IMG_SHAPE_X, 3),
@@ -97,29 +97,38 @@ class ComputerVisionCapture:
             config.RGB_BLUE_COLOR,
             config.MEDIUM_LINE_SIZE
         )
-        return error_reading_camera, previous_indexes
+        return error_reading_camera
 
-    def process_image(self, previous_indexes, frame=cv2.VideoCapture(0)):
+    def check_if_pressed_key(self, indexes, fingertips_info, contours) -> tuple:
+        pressed_locations = []
+        for finger_key, finger_values in fingertips_info.items():
+            indexes[finger_key] = finger_values["cz"]
+            if finger_values["pressed"]:
+                pressed_locations.append((finger_values["cx"], finger_values["cy"]))
+                # play_note_by_key_place(1)
+
+    def process_image(self, previous_indexes:dict, frame=cv2.VideoCapture(0)) -> tuple:
         success, frame = frame.read()
         if not success:
-            return self.display_error_frame(previous_indexes)
+            return self.display_error_frame()
 
         rescaled_frame = helpers.rescale_image(frame)
+
+        blurred_image = helpers.get_cleaned_image_from_noises(rescaled_frame)
         
-        contours = self.find_contours(rescaled_frame.copy())
+        contours = self.find_contours(blurred_image)
 
         sorted_contours = self.sort_contours_left_to_right(contours, rescaled_frame)
 
         only_contours = [contour_info['contour'] for contour_info in sorted_contours]
         cv2.drawContours(rescaled_frame, only_contours, -1, config.RGB_RED_COLOR, 2)
 
-        hand_detected_image, position_fingertip_played = hand_tracker.hand_detect(
+        hand_detected_image, fingertips_info = hand_tracker.hand_detect(
             rescaled_frame, previous_indexes)
 
         stacked_img = np.hstack((rescaled_frame, hand_detected_image))
 
-        # play_note_by_key_place(1)
-        return stacked_img, position_fingertip_played
+        return stacked_img, previous_indexes
 
 
 computer_vision = ComputerVisionCapture()
