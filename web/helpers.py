@@ -4,7 +4,7 @@ import config
 
 def get_cleaned_image_from_noises(image):
     # Removes the "noises" in image (removes extra elements like bad lighting)
-    blurred_image = cv2.GaussianBlur(image, (5, 5), cv2.BORDER_DEFAULT)
+    blurred_image = cv2.GaussianBlur(image, (3, 3), cv2.BORDER_DEFAULT)
     return blurred_image
 
 
@@ -15,10 +15,10 @@ def draw_contours(img, contours, color=config.RGB_RED_COLOR, thickness=2) -> Non
         pass  # contours are null, but that's not an error
 
 def threshold_image(image):
-    blurred_image = get_cleaned_image_from_noises(image)
     # converts the image to gray (because it's easier to find elements)
-    gray_image = cv2.cvtColor(blurred_image, cv2.COLOR_BGR2GRAY)
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     thresh = cv2.threshold(gray_image, 150, 200, cv2.THRESH_BINARY_INV)[1]
+    # thresh = cv2.threshold(gray_image, 100, 150, cv2.THRESH_BINARY_INV)[1]
     # return cv2.Canny(gray_image, 10, 200, 3)
     return thresh
 
