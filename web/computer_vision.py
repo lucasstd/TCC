@@ -27,7 +27,7 @@ class ComputerVisionCapture:
     def get_contours_in_image(self):
         """Yields an image type to be send with draws and contours"""
         camera = cv2.VideoCapture(0)
-        fingers_info = {finger: 10 for finger in config.LANDMARK_FINGERTIPS_NUMBERS}
+        fingers_info = {finger: 0 for finger in config.LANDMARK_FINGERTIPS_NUMBERS}
         while True:
             processed_image, fingers_info = computer_vision.process_image(
                 fingers_info, camera
@@ -99,10 +99,10 @@ class ComputerVisionCapture:
         )
         return error_reading_camera
 
-    def check_if_pressed_key(self, indexes, fingertips_info, contours) -> tuple:
+    def check_if_pressed_key(self, indexes, fingertips_info, contours) -> None:
         pressed_locations = []
         for finger_key, finger_values in fingertips_info.items():
-            indexes[finger_key] = finger_values["cz"]
+            indexes[finger_key] = finger_values["cy"]
             if finger_values["pressed"]:
                 pressed_locations.append((finger_values["cx"], finger_values["cy"]))
                 # play_note_by_key_place(1)
@@ -126,7 +126,11 @@ class ComputerVisionCapture:
         hand_detected_image, fingertips_info = hand_tracker.hand_detect(
             rescaled_frame, previous_indexes)
 
-        stacked_img = np.hstack((rescaled_frame, hand_detected_image))
+        self.check_if_pressed_key(previous_indexes, fingertips_info, contours)
+
+        aux = helpers.threshold_image(rescaled_frame)
+
+        stacked_img = aux  # np.hstack((rescaled_frame, hand_detected_image))
 
         return stacked_img, previous_indexes
 
