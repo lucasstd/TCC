@@ -2,7 +2,7 @@ Eletronic Keyboard
 ==================
 
 # To execute for now you need to install all requirements on your machine
-## You can setup using virtualenv (to don't use your global settings)
+## You can setup using virtualenv (to don't use your global settings) [tutorial](https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/26/python-virtual-env/)
 ```console
 pip install virtual env
 ```
@@ -12,7 +12,7 @@ virtualenv venv
 ```
 
 ```console
-. venv/bin/activate
+source venv/bin/activate
 ```
 
 To deactivate just type
