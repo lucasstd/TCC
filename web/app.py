@@ -1,5 +1,4 @@
 import json
-import cv2
 
 from flask import Flask, render_template, Response, abort
 
@@ -29,7 +28,7 @@ def index():
 
 @app.route("/song/<song_id>")
 def song_tutorial(song_id):
-    song = songs.get(song_id)
+    # song = songs.get(song_id)
     for song_difficulty in songs:
         song_details = songs[song_difficulty].get(song_id)
         if song_details:

@@ -1,6 +1,5 @@
 import cv2
 import mediapipe as mp
-from decimal import Decimal
 
 from config import *
 
@@ -44,10 +43,10 @@ def hand_detect(frame, previous_fingers:dict):
 
                 # the location is a Decimal with something like 12 numbers after 0
                 # mediapipe normalize the number but is really volatil
-                normalize_num = 5
+                normalize_num = 2
                 old_num = previous_fingers.get(fingertip_number) + normalize_num
 
-                pressed = True if not old_num or old_num <= cy else False
+                pressed = True if old_num < cy else False
 
                 key_info[fingertip_number] = {
                     "pressed": pressed,

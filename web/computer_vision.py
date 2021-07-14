@@ -14,12 +14,12 @@ class ComputerVisionCapture:
 
     def is_a_keyboard_key(self, contour):
         contour_area = cv2.contourArea(contour)
-        if 10000 > contour_area > 400:
+        if 10000 > contour_area > 800:
             are_shapes_close = True
             contour_length = cv2.arcLength(contour, are_shapes_close)
             approx_curve = cv2.approxPolyDP(
-                contour, 0.02 * contour_length, are_shapes_close)
-            if 12 > len(approx_curve) > 3:
+                contour, 0.01 * contour_length, are_shapes_close)
+            if 10 > len(approx_curve) > 3:
                 return True
         return False
 
@@ -107,7 +107,7 @@ class ComputerVisionCapture:
                 pressed_locations.append((finger_values["cx"], finger_values["cy"]))
                 # play_note_by_key_place(1)
 
-    def process_image(self, previous_indexes:dict, frame=cv2.VideoCapture(0)) -> tuple:
+    def process_image(self, previous_indexes: dict, frame=cv2.VideoCapture(0)) -> tuple:
         success, frame = frame.read()
         if not success:
             return self.display_error_frame()
@@ -128,9 +128,7 @@ class ComputerVisionCapture:
 
         self.check_if_pressed_key(previous_indexes, fingertips_info, contours)
 
-        aux = helpers.threshold_image(rescaled_frame)
-
-        stacked_img = aux  # np.hstack((rescaled_frame, hand_detected_image))
+        stacked_img = np.hstack((rescaled_frame, hand_detected_image))
 
         return stacked_img, previous_indexes
 

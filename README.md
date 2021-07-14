@@ -30,7 +30,8 @@ pip install -r requirements.txt
 ## Now you can just execute the code (in some systems could be python3 main.py, make sure u r using python3)
 
 ```console
-python web/app.py
+cd web
+python3 app.py
 ```
 
 ## You can open the website in your browsers at:
